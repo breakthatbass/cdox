@@ -7,6 +7,12 @@ a simple documentation automator for simple `.c` projects.
 cdox infile outfile
 ```
 
+## installation
+```
+# clone repo then
+pip install .
+```
+
 ## how it works
 cdox reads in a `.h` file and creates documentation in a markdown file.
 
