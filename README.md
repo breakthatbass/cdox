@@ -1,6 +1,8 @@
 # cdox
 
-a simple documentation automator for simple `.c` projects.  
+a script to automate documentation of `c` projects.  
+
+i made this super fast just to get a bunch of documentation automated and done quick. maybe i'll come back and make the code clean and proper when i get some time! in the meantime it's working well enough.
 
 ## usage
 ```
@@ -14,7 +16,7 @@ pip install .
 ```
 
 ## how it works
-cdox reads in a `.h` file and creates documentation in a markdown file.
+cdox reads in a `.h` or `.c` file and creates documentation in a markdown file.
 
 **keywords:**
 - `@name:` name of documentation
@@ -28,7 +30,8 @@ cdox reads in a `.h` file and creates documentation in a markdown file.
 - the multiline comments must start with `/* *` and end with `* */` each on their own line
 - the function prototype must be on the line following the `* */`
 
-## example
+## example with correct formatting
+#
 ```C
 /******************************************************************************
 *
@@ -65,12 +68,10 @@ int append(list_t *l, int int_to_append);
 
 #endif
 ```
+#
 
 ### the above file will create this:
-
-<br>
-<br>
-
+#
 # my test file documentation
 a small library to push and pop some functions and see how the doc program works  
 #
@@ -91,7 +92,4 @@ int append(list_t *l, int int_to_append);
 
 <br>
 
-
-
-## note:
-there isn't a whole lot of error checking here and the code isn't exactly clean. i made this super fast just to get a bunch of documentation automated and done quick. maybe i'll come back and make the code clean and proper when i get some time! in the meantime it's working well enough.
+#
