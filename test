@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if python3 cdox/cdox.py test_prog.h outfile.md; then
+    open outfile.md -a 'visual studio code'
+else
+    echo 'problem running program'
+fi
+
