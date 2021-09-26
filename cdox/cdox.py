@@ -1,5 +1,4 @@
 import sys
-from argparse import ArgumentParser
 
 IN_DOCS = False
 IN_FUNC = False
