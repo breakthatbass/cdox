@@ -30,7 +30,12 @@ cdox reads in a `.h` or `.c` file and creates documentation in a markdown file.
 - the multiline comments must start with `/* *` and end with `* */` each on their own line
 - the function prototype must be on the line following the `* */`
 
+## TODO
+- add feature to allow making section headers
+- add ability to handle a multi-line @descripton
+
 ## example with correct formatting
+`test_prog.h`
 #
 ```C
 /******************************************************************************
@@ -68,10 +73,15 @@ int append(list_t *l, int int_to_append);
 
 #endif
 ```
-#
 
-### the above file will create this:
-#
+<br>
+
+running `cdox test_prog.h test_prog.md` will create:
+
+`test_prog.md`
+
+<br>
+
 # my test file documentation
 a small library to push and pop some functions and see how the doc program works  
 #
