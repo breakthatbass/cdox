@@ -17,6 +17,13 @@ def read_infile_into_list(infile):
 
 
 def parse(file, outfile):
+    '''takes a list (file as list) parses it line by line, and writes to the makrdown file'''
+
+    # make sure `file` is a list
+    if not isinstance(file, list):
+        print('error: def parse() requires file as list form')
+        sys.exit()
+
     infos = []
     returns = ''
     prototype = ''
@@ -70,8 +77,6 @@ def main():
     outfile = sys.argv[2]
 
     infile_list = read_infile_into_list(infile)
-    for i in infile_list:
-        print(i, end='')
 
     parse(infile_list, outfile)
 
