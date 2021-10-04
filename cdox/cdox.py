@@ -1,10 +1,30 @@
 import sys
 
-IN_DOCS = False
-IN_FUNC = False
+keywords = {
+        'INFO_LINE' : '@info:',
+        'RETURNS_LINE' : '@returns',
+        'NAME_LINE' : '@name',
+        'DESC_LINE' : '@description'
+    }
+
+RETURN_BOLD_MD = '- **returns**'
+END_LINE = '\n#\n'
+SECTION_SEPR_MD = '\n<br>\n\n'
+FUNC_START = '```C\n'
+FUNC_END = '\n```\n'
+DOC_END = ' * */\n'
+
 
 def read_infile_into_list(infile):
-    '''attempt to open the infile and outfile. if opened, return them'''
+    '''
+        read a file into a line with each element as a file line
+
+        param: infile
+            expects a src code file that handles comments with '/*' & '*/', not '#'
+
+        return:
+            list holding file contents
+    '''
     try:
         cf = open(infile, 'r')
     except FileNotFoundError as fnf_error:
@@ -16,69 +36,105 @@ def read_infile_into_list(infile):
     return infile_list
 
 
-def parse(file, outfile):
-    '''takes a list (file as list) parses it line by line, and writes to the makrdown file'''
 
-    # make sure `file` is a list
-    if not isinstance(file, list):
-        print('error: def parse() requires file as list form')
+def handle_keyword_line(line, doc):
+    '''
+        handle a line containing a cdox keyword, parse it as necessary,
+        and either return it or write it to the markdown file.
+
+        params: line, doc
+            line - the line from the file that contains a cdox keyword
+            doc - the markdown file we're attempting to write to
+
+        returns:
+            if keyword is '@name' or @description', write to doc
+            else return the parsed line 
+    '''
+
+    index = line.find(':')+2
+    doc_line =  line[index:]
+
+    if keywords['NAME_LINE'] in line:
+        doc.write(f'# {doc_line.strip()} documentation\n')
+    elif keywords['DESC_LINE'] in line:
+        doc.write(f'{doc_line} {END_LINE}')
+    elif keywords['RETURNS_LINE'] in line:
+        return f'{RETURN_BOLD_MD} {doc_line}'
+    else:
+        return f'- {doc_line}'
+    return
+
+
+def append_func_docs(func_line, bullets, doc):
+    '''
+        write a function name and its bullet points to the markdown doc
+
+        params:
+            func_line - the line containing the function name
+            bullets - list containing all the info for that function
+            doc - the markdown file we're attempting to write to
+    '''
+
+    # chars that might be in the func line that we don't want
+    junk = ['{', ';']
+
+    for jank in junk:
+        if jank in func_line:
+            func_line = func_line.replace(jank, '')
+
+    doc.write(f'{FUNC_START}{func_line.strip()} {FUNC_END}')
+    
+    for bullet in bullets:
+        if bullet: # just make sure bullet element is not None
+            doc.write(bullet)
+    doc.write(SECTION_SEPR_MD)
+
+    
+
+def parse(infile, outfile):
+    '''
+        parse each line of infile and write what we need to outfile
+
+        params:
+            infile - the file we're reading from containing line by line in a list
+            outfile - the markdown file we're attempting to wrtie to
+    '''
+    bullet_points_md = []
+    count = 0
+
+    try:
+        doc = open(outfile, 'w')
+    except:
+        print(f'problem creating {outfile}')
         sys.exit()
 
-    infos = []
-    returns = ''
-    prototype = ''
-    new_func = '\n<br>\n\n'
-
-    global IN_DOCS
-    global IN_FUNC
-
-    with open(outfile, 'w') as doc:
-        for line in file:
-            if IN_DOCS == True:
-                if ' * @info: ' in line:
-                    info = line.replace(' * @info: ', '', 1)
-                    infos.append(info)
-                elif ' * @returns:' in line:
-                    info = line.replace(' * @returns: ', '', 1)
-                    returns = info
-                    IN_DOCS = False
-            elif IN_FUNC == True:
-                    prototype = "```C\n" + line + "```\n"
-                    doc.write(prototype)
-                    for poo in infos:
-                        doc.write('- ' + poo)
-                    doc.write('- **returns** ' + returns)
-                    doc.write(new_func)
-                    infos.clear()
-                    IN_FUNC = False
-                    
-            elif line == '/* *\n':
-                IN_DOCS = True
-
-            elif line == ' * */\n':
-                IN_FUNC = True
-
-            elif '@name:' in line:
-                title = '# ' + line.split(':')[1].lstrip().strip() + ' documentation\n'
-                doc.write(title)
-            elif '@description:' in line:
-                desc = line.split(':')[1].lstrip().strip()
-                doc.write(desc + '  \n#\n')
-            else:
-                continue
+    for line in infile:
+        # check if line contains any of the string constants above
+        if any(keyword in line for keyword in list(keywords.values())):
+            # we have a line with documentation, handle it
+            bullet_points_md.append(handle_keyword_line(line, doc))
+        
+        # if the prev line was end a doc section, current line is a function name
+        elif infile[count-1] == DOC_END:
+            append_func_docs(line, bullet_points_md, doc)
+            bullet_points_md.clear()
+        count+=1
+    doc.close()
 
 
-def main():        
+
+def main():    
     if len(sys.argv) != 3:
         print('usage: cdox infile outfile')
         sys.exit()
 
     infile = sys.argv[1]
     outfile = sys.argv[2]
-
+    
     infile_list = read_infile_into_list(infile)
 
     parse(infile_list, outfile)
+   
 
 if __name__ == '__main__':
     main()
