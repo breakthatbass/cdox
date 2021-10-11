@@ -5,7 +5,7 @@ from cdox.cdox import read_infile_into_list, handle_keyword_line, append_func_do
 
 
 def test_read_infile():
-    infile = read_infile_into_list('tests/tfiles/test.txt')
+    infile = read_infile_into_list('tests/test.txt')
     assert infile[0] == 'this is a test file\n'
     assert infile[1] == 'for the read_infile_into_list\n'
     assert infile[2] == 'function.\n'
