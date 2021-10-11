@@ -2,9 +2,9 @@ import sys
 
 keywords = {
         'INFO_LINE' : '@info:',
-        'RETURNS_LINE' : '@returns',
-        'NAME_LINE' : '@name',
-        'DESC_LINE' : '@description'
+        'RETURNS_LINE' : '@returns:',
+        'NAME_LINE' : '@name:',
+        'DESC_LINE' : '@description:'
     }
 
 RETURN_BOLD_MD = '- **returns**'
@@ -13,6 +13,7 @@ SECTION_SEPR_MD = '\n<br>\n\n'
 FUNC_START = '```C\n'
 FUNC_END = '\n```\n'
 DOC_END = ' * */\n'
+
 
 
 def read_infile_into_list(infile):
@@ -29,40 +30,43 @@ def read_infile_into_list(infile):
         cf = open(infile, 'r')
     except FileNotFoundError as fnf_error:
         print(fnf_error)
-        sys.exit()
-
-    infile_list = cf.readlines()
-    cf.close()
-    return infile_list
-
+        # sys.exit()
+    finally:
+        infile_list = cf.readlines()
+        cf.close()
+        return infile_list
 
 
 def handle_keyword_line(line, doc):
     '''
         handle a line containing a cdox keyword, parse it as necessary,
         and either return it or write it to the markdown file.
-
+        
         params: line, doc
             line - the line from the file that contains a cdox keyword
             doc - the markdown file we're attempting to write to
-
+        
         returns:
             if keyword is '@name' or @description', write to doc
             else return the parsed line 
     '''
-
     index = line.find(':')+2
     doc_line =  line[index:]
 
+    # if we are dealing with the name and description, we just write to doc
+    # we only do that once
     if keywords['NAME_LINE'] in line:
         doc.write(f'# {doc_line.strip()} documentation\n')
     elif keywords['DESC_LINE'] in line:
         doc.write(f'{doc_line} {END_LINE}')
+    # bullet points
     elif keywords['RETURNS_LINE'] in line:
         return f'{RETURN_BOLD_MD} {doc_line}'
-    else:
+    elif keywords['INFO_LINE'] in line:
         return f'- {doc_line}'
-    return
+    else:
+        return None
+
 
 
 def append_func_docs(func_line, bullets, doc):
@@ -74,24 +78,24 @@ def append_func_docs(func_line, bullets, doc):
             bullets - list containing all the info for that function
             doc - the markdown file we're attempting to write to
     '''
-
     # chars that might be in the func line that we don't want
     junk = ['{', ';']
 
     for jank in junk:
         if jank in func_line:
             func_line = func_line.replace(jank, '')
-
+    # write the function prototype
     doc.write(f'{FUNC_START}{func_line.strip()} {FUNC_END}')
-    
+    # write all the bullet points
     for bullet in bullets:
         if bullet: # just make sure bullet element is not None
             doc.write(bullet)
+    # add a section seperator to the doc
     doc.write(SECTION_SEPR_MD)
 
-    
 
-def parse(infile, outfile):
+
+def parse(infile, doc):
     '''
         parse each line of infile and write what we need to outfile
 
@@ -102,24 +106,17 @@ def parse(infile, outfile):
     bullet_points_md = []
     count = 0
 
-    try:
-        doc = open(outfile, 'w')
-    except:
-        print(f'problem creating {outfile}')
-        sys.exit()
-
     for line in infile:
         # check if line contains any of the string constants above
         if any(keyword in line for keyword in list(keywords.values())):
-            # we have a line with documentation, handle it
+            # we have a line with documentation, handle it, append to list
             bullet_points_md.append(handle_keyword_line(line, doc))
-        
-        # if the prev line was end a doc section, current line is a function name
+        # if the prev line was end of a doc section, current line is a function name
         elif infile[count-1] == DOC_END:
+            # we write all the info for a function to the doc
             append_func_docs(line, bullet_points_md, doc)
             bullet_points_md.clear()
         count+=1
-    doc.close()
 
 
 
@@ -133,8 +130,14 @@ def main():
     
     infile_list = read_infile_into_list(infile)
 
-    parse(infile_list, outfile)
-   
+    try:
+        doc = open(outfile, 'w')
+    except:
+        print(f'problem creating {outfile}')
+        sys.exit()
+    finally:
+        parse(infile_list, doc)
+        doc.close()
 
 if __name__ == '__main__':
     main()
