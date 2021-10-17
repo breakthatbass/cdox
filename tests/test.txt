@@ -1,3 +1,0 @@
-this is a test file
-for the read_infile_into_list
-function.
