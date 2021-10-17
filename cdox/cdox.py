@@ -200,7 +200,11 @@ def error_check(infile, outfile):
 
 def main():
 
-    d = Doc('tests/test.h', 'o.md')
+    if len(sys.argv) != 3:
+        print('usage: cdox infile outfile')
+        sys.exit(1)
+
+    d = Doc(sys.argv[1], sys.argv[2])
     d.parse_file()
 
 if __name__ == '__main__':
