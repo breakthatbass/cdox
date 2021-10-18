@@ -17,13 +17,13 @@ def test_class_init_fail():
 
         assert n.name == ''
         assert n.description == ''
-    
+'''  
 def test_class_init_pass():
     n = Doc(TEST_PASS, 'o.md')
     m = n.read_into_list()
     assert m is not None
     assert m[1] == '*\n'
-
+'''
 
 # dont read from file for lines to use
 # just use strings instead to test on the functions

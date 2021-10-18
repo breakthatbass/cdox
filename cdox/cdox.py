@@ -2,12 +2,12 @@ import sys
 import pathlib
 
 '''
-add @param and @global keywords
+add @param and @global KEYWORDS
 '''
 
 class Doc:
 
-    keywords = {
+    KEYWORDS = {
         'PARAM_LINE' : '@param:',           # func params
         'DESC_LINE' : '@desc:',             # func description
         'RETURN_LINE' : '@return:',         # func returns
@@ -37,29 +37,6 @@ class Doc:
             sys.exit(1)
 
 
-
-    def read_into_list(self):
-        '''
-            read a file into a line with each element as a file line
-            
-            param: infile
-                expects a src code file that handles comments with '/*' & '*/', not '#'
-            
-            return:
-                list holding file contents
-        '''
-        try:
-            fp = open(self.infile, 'r')
-        except FileNotFoundError as fnf_error:
-            print(fnf_error)
-            return None
-        
-        infile_list = fp.readlines()
-        fp.close()
-        return infile_list
-
-
-
     def handle_keyword_line(self, line):
         '''
             handle a line containing a cdox keyword, parse it as necessary,
@@ -75,20 +52,20 @@ class Doc:
         index = line.find(':')+2
         doc_line = line[index:]
 
-        if self.keywords['NAME_LINE'] in line:
+        if self.KEYWORDS['NAME_LINE'] in line:
             self.name = f'# {doc_line.strip()} documentation\n'
 
-        elif self.keywords['API_DESC_LINE'] in line:
+        elif self.KEYWORDS['API_DESC_LINE'] in line:
             self.description = f'{doc_line} {self.END_LINE}'
 
         # bullet points
-        elif self.keywords['RETURN_LINE'] in line:
+        elif self.KEYWORDS['RETURN_LINE'] in line:
             self.info_list.append(f'{self.RETURN_BOLD_MD} {doc_line}')
 
-        elif self.keywords['PARAM_LINE'] in line:
+        elif self.KEYWORDS['PARAM_LINE'] in line:
             self.info_list.append(f'- {doc_line}')
 
-        elif self.keywords['DESC_LINE'] in line:
+        elif self.KEYWORDS['DESC_LINE'] in line:
             self.info_list.append(f'{doc_line}')
 
         else:
@@ -155,26 +132,23 @@ class Doc:
             parse the file, open the mrkdown file, and parse the necessary lines
             and write the documentation
         '''
-        cfile = self.read_into_list()
-        # doc = self._open_md_file()
-        with open(self.outfile, 'w') as doc:
-        
-            count = 0
-            for line in cfile:
+        doc = open(self.outfile, 'w')
 
+        with open(self.infile, 'r') as cfile:
+            prev = ''
+            for line in cfile:
                 if self.name != '' and self.description != '':
                     self.write_name_desc(doc)
-
                 # check if line contains any of the string constants above
-                if any(keyword in line for keyword in list(self.keywords.values())):
+                if any(keyword in line for keyword in self.KEYWORDS.values()):
                     self.handle_keyword_line(line)
-
-                elif cfile[count-1] == self.DOC_END:
+                elif prev == self.DOC_END:
                     # we're at the function prototype/name
                     self.func_name = self.get_func_name(line)
                     # if we've got the function name, we write to the doc
                     self.doc_write(doc)
-                count += 1
+                prev = line
+        doc.close()
             
 
 def error_check(infile, outfile):
