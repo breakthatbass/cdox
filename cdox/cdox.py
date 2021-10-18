@@ -1,5 +1,6 @@
 import sys
 import pathlib
+import os.path
 
 '''
 add @param and @global KEYWORDS
@@ -22,19 +23,17 @@ class Doc:
     FUNC_END = '\n```\n'
     DOC_END = ' * */\n'
 
-    # hold the data from @name and @description here for access
-    name = ''
-    description = ''
-    info_list = []  # should end up being something like [@desc, @param, @param, @return]
-    func_name = ''
-    
     def __init__(self, infile, outfile):
         self.infile = infile        # file to create the doc for
         self.outfile = outfile      # the doc file to be created
+        
+        self.name = ''
+        self.description = ''
+        self.info_list = []  # should end up being something like [@desc, @param, @param, @return]
+        self.func_name = ''
 
         # make sure files are usuable for the program
-        if error_check(self.infile, self.outfile) != 0:
-            sys.exit(1)
+        error_check(self.infile, self.outfile)
 
 
     def handle_keyword_line(self, line):
@@ -132,11 +131,13 @@ class Doc:
             parse the file, open the mrkdown file, and parse the necessary lines
             and write the documentation
         '''
+        # file we're writing to, at this point, we're sure it'll open
         doc = open(self.outfile, 'w')
 
         with open(self.infile, 'r') as cfile:
             prev = ''
-            for line in cfile:
+            line = cfile.readline()
+            while line != '':
                 if self.name != '' and self.description != '':
                     self.write_name_desc(doc)
                 # check if line contains any of the string constants above
@@ -148,6 +149,7 @@ class Doc:
                     # if we've got the function name, we write to the doc
                     self.doc_write(doc)
                 prev = line
+                line = cfile.readline()
         doc.close()
             
 
@@ -169,14 +171,10 @@ def error_check(infile, outfile):
     in_ext = pathlib.Path(infile).suffix
     out_ext = pathlib.Path(outfile).suffix
 
-    if in_ext not in ok_files:
-        print(f'ERROR: {infile} is not a valid file')
-        return 1
+    assert (in_ext in ok_files), f'ERROR: {infile} is not a valid file'
+    assert (out_ext == '.md'), f'ERROR: outfile must be markdown format'
+    assert (os.path.exists(infile)), f'ERROR: {infile} not found'
 
-    if out_ext != '.md':
-        print(f'ERROR: outfile must be markdown format')
-        return 2
-    return 0
 
 
 
