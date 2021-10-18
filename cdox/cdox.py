@@ -34,15 +34,15 @@ class Doc:
 
     def handle_keyword_line(self, line):
         '''
-            handle a line containing a cdox keyword, parse it as necessary,
+            Handle a line containing a cdox keyword, parse it as necessary,
             and either return it or write it to the markdown file.
             
-            params: line
-                line - the line from the file that contains a cdox keyword
+            Params: line
+                A line from the file that contains a cdox keyword.
             
-            returns:
+            Returns:
                 None if the line does not contain a keyword
-                otherwise it defines the global class variables
+                otherwise it defines the global class variables.
         '''
         index = line.find(':')+2
         doc_line = line[index:]
@@ -63,14 +63,14 @@ class Doc:
 
     def get_func_name(self, line):
         '''
-            parses a line containing a function parameter 
-            and returns it ready to be written to the doc
+            Parses a line containing a function parameter 
+            and returns it ready to be written to the doc.
             
-            param: line
-                a line from the file being read from - expects a function in the line
+            Params: line
+                A line from the file being read from - expects a function in the line.
             
-            returns:
-                a formatted code string to be written to the markdown doc
+            Returns:
+                A formatted code string to be written to the markdown doc.
         '''
         # chars that might be in the func line that we don't want
         junk = ['{', ';']
@@ -82,11 +82,11 @@ class Doc:
 
     def write_name_desc(self, doc):
         '''
-            writes the objects @name and @description varibles to the top
-            of the markdown doc. then erases them...which maybe isn't necessary.
+            Writes the object's @name and @description varibles to the top
+            of the markdown doc. then erases them.
 
-            param: doc
-                the markdown file being written to
+            Params: doc
+                The markdown file being written to.
 
         '''
         doc.write(self.name)
@@ -96,11 +96,11 @@ class Doc:
 
     def doc_write(self, doc):
         '''
-            write all the info pertaining to a funtion to the markdown doc
+            Write all the info pertaining to a funtion to the markdown doc
             then erase the global variables to be used for another function.
 
-            param: doc
-                the markdown file being written to
+            Params: doc
+                The markdown file being written to.
         '''
         doc.write(self.func_name)
         for el in self.info_list:
@@ -111,8 +111,8 @@ class Doc:
 
     def parse_file(self):
         '''
-            parse the file, open the mrkdown file, and parse the necessary lines
-            and write the documentation
+            Open the markdown file, and parse the necessary lines from the source code file,
+            and write the documentation.
         '''
         # file we're writing to, at this point, we're sure it'll open
         doc = open(self.outfile, 'w')
@@ -138,11 +138,11 @@ class Doc:
 
 def error_check(infile, outfile):
     '''
-        check that infile and outfile have specific file extentions
+        Check that infile and outfile have specific file extentions and infile exists
 
-        params: infile, outfile
-            infile - the file to be read from and create the doc for
-            outfile - the markdown documentation file to write
+        Params: infile, outfile
+            infile - the file to be read from and create the doc for - expects .c or .h.
+            outfile - the markdown documentation file to write.
     '''
     ok_files = ['.c', '.h']
     # check file extensions
