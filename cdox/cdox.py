@@ -1,13 +1,18 @@
 import sys
 import pathlib
 
+'''
+add @param and @global keywords
+'''
+
 class Doc:
 
     keywords = {
-        'INFO_LINE' : '@info:',
-        'RETURNS_LINE' : '@returns:',
-        'NAME_LINE' : '@name:',
-        'DESC_LINE' : '@description:'
+        'PARAM_LINE' : '@param:',           # func params
+        'DESC_LINE' : '@desc:',             # func description
+        'RETURN_LINE' : '@return:',         # func returns
+        'NAME_LINE' : '@name:',             # API doc name
+        'API_DESC_LINE' : '@description:'   # API doc description
     }
 
     RETURN_BOLD_MD = '- **returns**'
@@ -20,7 +25,7 @@ class Doc:
     # hold the data from @name and @description here for access
     name = ''
     description = ''
-    info_list = []
+    info_list = []  # should end up being something like [@desc, @param, @param, @return]
     func_name = ''
     
     def __init__(self, infile, outfile):
@@ -68,20 +73,23 @@ class Doc:
                 otherwise it defines the global class variables
         '''
         index = line.find(':')+2
-        doc_line =  line[index:]
+        doc_line = line[index:]
 
         if self.keywords['NAME_LINE'] in line:
             self.name = f'# {doc_line.strip()} documentation\n'
 
-        elif self.keywords['DESC_LINE'] in line:
+        elif self.keywords['API_DESC_LINE'] in line:
             self.description = f'{doc_line} {self.END_LINE}'
 
         # bullet points
-        elif self.keywords['RETURNS_LINE'] in line:
+        elif self.keywords['RETURN_LINE'] in line:
             self.info_list.append(f'{self.RETURN_BOLD_MD} {doc_line}')
 
-        elif self.keywords['INFO_LINE'] in line:
+        elif self.keywords['PARAM_LINE'] in line:
             self.info_list.append(f'- {doc_line}')
+
+        elif self.keywords['DESC_LINE'] in line:
+            self.info_list.append(f'{doc_line}')
 
         else:
             return None
@@ -182,7 +190,7 @@ def error_check(infile, outfile):
             2: outfile is not a markdown file
             0: both files are usable
     '''
-    ok_files = ['.c', '.h', '.hpp', '.cpp', '.java', '.js']
+    ok_files = ['.c', '.h']
     # check file extensions
     in_ext = pathlib.Path(infile).suffix
     out_ext = pathlib.Path(outfile).suffix
