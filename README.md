@@ -1,6 +1,8 @@
 # cdox
 
-a script to automate documentation of your C APIs in markdown format. `cdox` reads in a source code file creates documentation based on the comments. it's sort of like doxygen but simpler and just creates a markdown file which looks good on github.  
+a script to automate documentation of your C APIs in markdown format.  
+
+`cdox` reads in a source code file creates documentation based on the comments. it's sort of like doxygen but simpler and just creates a markdown file which looks good on github.  
 
 ## usage
 ```
@@ -26,12 +28,12 @@ pip install .
 - the multiline comments must start with `/* *` and end with `* */` each on their own line.
 - the function name/protoype must be on the line following the `* */`
 
-## TODO
+## todo
 - add it as a package to pypi
 - add feature to allow making section headers
 - add @global keyword for documentation of global variables
 
-## Example
+## example
 Below is an excerpt from [`test.c`](https://github.com/breakthatbass/cdox/blob/main/tests/test.c) which would create the doc below. For the full example doc, check out [`example.md](https://github.com/breakthatbass/cdox/blob/main/example.md)
 ```C
 /* *
