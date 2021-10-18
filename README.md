@@ -1,6 +1,6 @@
 # cdox
 
-a script to automate documentation of your APIs in markdown format.  
+a script to automate documentation of your C APIs in markdown format. `cdox` reads in a source code file creates documentation based on the comments. it's sort of like doxygen but simpler and just creates a markdown file which looks good on github.  
 
 ## usage
 ```
@@ -13,14 +13,13 @@ git clone https://github.com/breakthatbass/cdox.git
 pip install .
 ```
 
-## about
-`cdox` reads in a source code file creates documentation based on the comments. it's sort of like doxygen but simpler and just creates a markdown file which looks good on github.  
+## rulw 
 
 **cdox keywords:**
 - `@name:` name of documentation
-- `@description` description of documentation
-- `@info:` a bullet point for info on a function
-- `@returns:` a bullet point for what the function returns
+- `@description` description of file documentation
+- `@param:` a bullet point for info on a function paramter
+- `@return:` a bullet point for what the function returns
 
 **rules:**
 - the keywords must be in multiline comments. 
@@ -30,64 +29,38 @@ pip install .
 ## TODO
 - add it as a package to pypi
 - add feature to allow making section headers
-- add ability to handle a multi-line @descripton
-- add @param keyword for function parameters
 - add @global keyword for documentation of global variables
-- add @class keyword for better docs for classes
 
-## example
-`test_prog.h`
-#
+## Example
+Below is an excerpt from [`test.c`](https://github.com/breakthatbass/cdox/blob/main/tests/test.c) which would create the doc below. For the full example doc, check out [`example.md](https://github.com/breakthatbass/cdox/blob/main/example.md)
 ```C
-/******************************************************************************
-*
-*   Author: Taylor Gamache
-*   Email: gamache.taylor@gmail.com
-*
-*   the name and description keywords are expected to be at a comment block
-*   at the top of a file.
-*
-*   @name: my test file
-*   @description: a test file to see how cdox works
-*
-******************************************************************************/
-
-#ifndef TEST_PROG_H__
-#define TEST_PROG_H__
-
 /* *
- * push:
+ * strncmp
  * 
- * adding a line preceeding with the info keyword creates a bullet point for the markdown
- *
- * @info: adds `int_to_push` to front of list
- * @info: some more info.
- *
- * @returns: 0 if `malloc` fails, else 1.
+ * @desc: compare two strings up to `n` characters.
+ * 
+ * @param: `s1` - a char array of at least one char.
+ * @param: `s2` - a char array of at least one char.
+ * @param: `n` - the number of chars to compare of each string.
+ * 
+ * @return: 0 if strings are the same else a non-zero int.
  * */
-int push(list_t *l, int int_to_push);
-
-
-#endif
+int strncmp(const char *s1, const char *s2, int n)
+{
+  while(n > 0 && *s1 == *s2++) {
+    if(*s1++ == '\0')
+      return 0;
+    n--;
+  }
+  return (n == 0 ? 0 : *s1 - *--s2);
+}
 ```
-
-<br>
-
-running `cdox test_prog.h test_prog.md` will create:
-
-`test_prog.md`
-
----
-<br>
-
-# my test file documentation
-a test file to see how cdox works
 #
 ```C
-int push(list_t *l, int int_to_push)
+int strncmp(const char *s1, const char *s2, int n) 
 ```
-- adds `int_to_push` to front of list
-- some more info.
-- **returns** 0 if `malloc` fails, else 1.
-
----
+compare two strings up to `n` characters.
+- `s1` - a char array of at least one char.
+- `s2` - a char array of at least one char.
+- `n` - the number of chars to compare of each string.
+- **returns** 0 if strings are the same else a non-zero int.
