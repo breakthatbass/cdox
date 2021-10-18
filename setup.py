@@ -13,7 +13,7 @@ setup(
     url='https://github.com/breakthatbass/cdox',
     author=f'{__author__}',
     author_email='gamache.taylor@gmail.com',
-    packages=['cdox'],
+    packages=find_packages(exclude=('tests',)),
     license='MIT',
     entry_points={
         'console_scripts' : ['cdox = cdox.__main__:main']

@@ -1,5 +1,5 @@
 import sys
-from cdox import Doc
+from cdox.cdox import Doc
 
 
 def main():
