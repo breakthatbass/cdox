@@ -2,9 +2,6 @@ import sys
 import pathlib
 import os.path
 
-'''
-add @param and @global KEYWORDS
-'''
 
 class Doc:
 
