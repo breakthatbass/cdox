@@ -7,16 +7,15 @@ with open("README.md", "r") as fh:
 setup(
     name='cdox',
     version=f'{__version__}',
-    description='automate documentation of c projects based on .h files',
+    description='automate documentation of c projects',
     long_description=long_description,
     long_description_content_type='text/markdown',
+    url='https://github.com/breakthatbass/cdox',
     author=f'{__author__}',
     author_email='gamache.taylor@gmail.com',
-    #url='https://github.com/breakthatbass/scripts/notes-py',
-    packages=find_packages(),
+    packages=['cdox'],
     license='MIT',
-    #install_requires=['termcolor'],
     entry_points={
-        'console_scripts' : ['cdox = cdox.cdox:main']
+        'console_scripts' : ['cdox = cdox.__main__:main']
    }
 )
