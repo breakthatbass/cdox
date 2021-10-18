@@ -160,16 +160,11 @@ def error_check(infile, outfile):
         params: infile, outfile
             infile - the file to be read from and create the doc for
             outfile - the markdown documentation file to write
-
-        returns:
-            1: infile does not have the right file extension
-            2: outfile is not a markdown file
-            0: both files are usable
     '''
     ok_files = ['.c', '.h']
     # check file extensions
-    in_ext = pathlib.Path(infile).suffix
-    out_ext = pathlib.Path(outfile).suffix
+    in_ext = pathlib.Path(infile).suffix    # must be .c or .h
+    out_ext = pathlib.Path(outfile).suffix  # must .md
 
     assert (in_ext in ok_files), f'ERROR: {infile} is not a valid file'
     assert (out_ext == '.md'), f'ERROR: outfile must be markdown format'
