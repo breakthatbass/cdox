@@ -5,7 +5,7 @@ import subprocess
 
 
 TEST_FAIL = 'test.txt'      # file exists but should fail upon reading
-TEST_PASS = 'test.h'        # file exists and should pass upon reading
+TEST_PASS = 'test.c'        # file exists and should pass upon reading
 TEST_NO_EXIST = 'no_file!'  # file doesn't exist and should fail upon readin    g
 
 
@@ -17,13 +17,6 @@ def test_class_init_fail():
 
         assert n.name == ''
         assert n.description == ''
-'''  
-def test_class_init_pass():
-    n = Doc(TEST_PASS, 'o.md')
-    m = n.read_into_list()
-    assert m is not None
-    assert m[1] == '*\n'
-'''
 
 # dont read from file for lines to use
 # just use strings instead to test on the functions
@@ -61,13 +54,12 @@ def test_create_doc():
         best way i can think to test the writing functions is to create a doc
         and then test the size
     '''
-    doc = Doc(TEST_PASS, 'o.md')
-    doc.parse_file()
+    rc = subprocess.call('python ../cdox/cdox.py test.c m.md', shell=True)
 
-    fp = Path('o.md').stat()
+    fp = Path('m.md').stat()
     size = fp.st_size
 
-    #assert size == 892
+    assert size == 372
     
-# def test_clean_up(): 
-#    rc = subprocess.call('rm o.md', shell=True)
+def test_clean_up(): 
+    rc = subprocess.call('rm o.md', shell=True)
