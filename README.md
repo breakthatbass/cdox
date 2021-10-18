@@ -13,7 +13,7 @@ git clone https://github.com/breakthatbass/cdox.git
 pip install .
 ```
 
-## rulw 
+## rules 
 
 **cdox keywords:**
 - `@name:` name of documentation
