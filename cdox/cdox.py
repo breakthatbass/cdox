@@ -1,4 +1,3 @@
-import sys
 import pathlib
 import os.path
 
@@ -152,18 +151,3 @@ def error_check(infile, outfile):
     assert (in_ext in ok_files), f'ERROR: {infile} is not a valid file'
     assert (out_ext == '.md'), f'ERROR: outfile must be markdown format'
     assert (os.path.exists(infile)), f'ERROR: {infile} not found'
-
-
-
-
-def main():
-
-    if len(sys.argv) != 3:
-        print('usage: cdox infile outfile')
-        sys.exit(1)
-
-    d = Doc(sys.argv[1], sys.argv[2])
-    d.parse_file()
-
-if __name__ == '__main__':
-    main()
