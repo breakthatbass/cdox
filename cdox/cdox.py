@@ -35,7 +35,6 @@ class Doc:
         # make sure files are usuable for the program
         error_check(self.infile, self.outfile)
 
-
     def handle_keyword_line(self, line):
         '''
             handle a line containing a cdox keyword, parse it as necessary,
@@ -53,24 +52,17 @@ class Doc:
 
         if self.KEYWORDS['NAME_LINE'] in line:
             self.name = f'# {doc_line.strip()} documentation\n'
-
         elif self.KEYWORDS['API_DESC_LINE'] in line:
             self.description = f'{doc_line} {self.END_LINE}'
-
         # bullet points
         elif self.KEYWORDS['RETURN_LINE'] in line:
             self.info_list.append(f'{self.RETURN_BOLD_MD} {doc_line}')
-
         elif self.KEYWORDS['PARAM_LINE'] in line:
             self.info_list.append(f'- {doc_line}')
-
         elif self.KEYWORDS['DESC_LINE'] in line:
             self.info_list.append(f'{doc_line}')
-
         else:
             return None
-
-
 
     def get_func_name(self, line):
         '''
@@ -91,8 +83,6 @@ class Doc:
 
         return f'{self.FUNC_START}{line.strip()} {self.FUNC_END}'
 
-
-
     def write_name_desc(self, doc):
         '''
             writes the objects @name and @description varibles to the top
@@ -106,8 +96,6 @@ class Doc:
         doc.write(self.description)
         self.name = ''
         self.description = ''
-
-
 
     def doc_write(self, doc):
         '''
@@ -123,9 +111,7 @@ class Doc:
         doc.write(self.SECTION_SEPR_MD)
         self.info_list.clear()
         self.func_name = ''
-            
 
-   
     def parse_file(self):
         '''
             parse the file, open the mrkdown file, and parse the necessary lines
