@@ -1,5 +1,5 @@
 #!/bin/bash
 
-python3 ../cdox/cdox.py test.c test.md
+python3 ../cdox/__main__.py test.c test.md
 glow test.md
 open test.md -a 'visual studio code'
