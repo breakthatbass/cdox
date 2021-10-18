@@ -21,9 +21,9 @@ int global_int = 100;
  * 
  * @desc: compare two strings up to `n` characters.
  * 
- * @param: `s1` a char array of at least one char.
- * @param: `s2` a char array of at least one char.
- * @param: `n` the number of chars to compare of each string.
+ * @param: `s1` - a char array of at least one char.
+ * @param: `s2` - a char array of at least one char.
+ * @param: `n` - the number of chars to compare of each string.
  * 
  * @return: 0 if strings are the same else a non-zero int.
  * */
