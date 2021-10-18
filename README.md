@@ -1,6 +1,6 @@
 # cdox
 
-a script to automate documentation of your projects.  
+a script to automate documentation of your APIs in markdown format.  
 
 ## usage
 ```
@@ -14,7 +14,7 @@ pip install .
 ```
 
 ## about
-`cdox` reads in a source code file creates documentation based on the comments. it's like doxygen but simpler and just creates a markdown file which looks good on github.  
+`cdox` reads in a source code file creates documentation based on the comments. it's sort of like doxygen but simpler and just creates a markdown file which looks good on github.  
 
 **cdox keywords:**
 - `@name:` name of documentation
