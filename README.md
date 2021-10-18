@@ -9,13 +9,12 @@ cdox infile outfile
 
 ## installation
 ```
-# clone repo then
+git clone https://github.com/breakthatbass/cdox.git
 pip install .
 ```
 
-## how it works
-cdox reads in a source code file and creates documentation in a markdown file.  
-it should work with any programming language that uses `/*` and `*/` for multiline comments.  
+## about
+`cdox` reads in a source code file creates documentation based on the comments. it's like doxygen but simpler and just creates a markdown file which looks good on github.  
 
 **cdox keywords:**
 - `@name:` name of documentation
@@ -29,10 +28,14 @@ it should work with any programming language that uses `/*` and `*/` for multili
 - the function name/protoype must be on the line following the `* */`
 
 ## TODO
+- add it as a package to pypi
 - add feature to allow making section headers
 - add ability to handle a multi-line @descripton
+- add @param keyword for function parameters
+- add @global keyword for documentation of global variables
+- add @class keyword for better docs for classes
 
-## example with correct formatting
+## example
 `test_prog.h`
 #
 ```C
@@ -45,7 +48,7 @@ it should work with any programming language that uses `/*` and `*/` for multili
 *   at the top of a file.
 *
 *   @name: my test file
-*   @description: a small library to push and pop some functions and see how the doc program works
+*   @description: a test file to see how cdox works
 *
 ******************************************************************************/
 
@@ -58,21 +61,12 @@ it should work with any programming language that uses `/*` and `*/` for multili
  * adding a line preceeding with the info keyword creates a bullet point for the markdown
  *
  * @info: adds `int_to_push` to front of list
- * @info: somre more info.
+ * @info: some more info.
  *
  * @returns: 0 if `malloc` fails, else 1.
  * */
 int push(list_t *l, int int_to_push);
 
-
-/* *
- * append:
- *
- * @info: adds `int_to_append` at end of list.
- *
- * @returns: 0 if `malloc` fails, else 1.
- * */
-int append(list_t *l, int int_to_append);
 
 #endif
 ```
@@ -87,23 +81,13 @@ running `cdox test_prog.h test_prog.md` will create:
 <br>
 
 # my test file documentation
-a small library to push and pop some functions and see how the doc program works  
+a test file to see how cdox works
 #
 ```C
-int push(list_t *l, int int_to_push);
+int push(list_t *l, int int_to_push)
 ```
 - adds `int_to_push` to front of list
-- somre more info.
+- some more info.
 - **returns** 0 if `malloc` fails, else 1.
-
-<br>
-
-```C
-int append(list_t *l, int int_to_append);
-```
-- adds `int_to_append` at end of list.
-- **returns** 0 if `malloc` fails, else 1.
-
-<br>
 
 ---
