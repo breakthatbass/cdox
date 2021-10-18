@@ -1,7 +1,10 @@
 import pytest
+import subprocess
+import os
+
 from cdox.cdox import Doc
 from pathlib import Path
-import subprocess
+
 
 
 TEST_FAIL = 'test.txt'      # file exists but should fail upon reading
@@ -10,7 +13,7 @@ TEST_NO_EXIST = 'no_file!'  # file doesn't exist and should fail upon readin    
 
 
 def test_class_init_fail():
-    with pytest.raises(SystemExit):
+    with pytest.raises(AssertionError):
         n = Doc(TEST_FAIL, 'o.md')
         o = Doc(TEST_NO_EXIST, 'o.md')
         p = Doc(TEST_PASS, 'o.txt')    # test that the non .md outfile fails
@@ -54,7 +57,9 @@ def test_create_doc():
         best way i can think to test the writing functions is to create a doc
         and then test the size
     '''
-    rc = subprocess.call('python ../cdox/cdox.py test.c m.md', shell=True)
+    
+    test_doc = Doc('test.c', 'm.md')
+    test_doc.parse_file()
 
     fp = Path('m.md').stat()
     size = fp.st_size
@@ -62,4 +67,6 @@ def test_create_doc():
     assert size == 372
     
 def test_clean_up(): 
-    rc = subprocess.call('rm o.md', shell=True)
+    os.remove('m.md')
+
+
