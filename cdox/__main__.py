@@ -1,5 +1,8 @@
 import sys
-from cdox import Doc
+try:
+    from cdox import Doc
+except ImportError:
+    from cdox.cdox import Doc
 
 
 def main():
