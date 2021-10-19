@@ -30,7 +30,7 @@ pip install cdox
 
 
 ## Example Usage
-Check out [`example.md`](https://github.com/breakthatbass/cdox/blob/main/example.md) for what the below example would produce.
+Check out [`example.md`](https://github.com/breakthatbass/cdox/blob/main/example.md) for what the [`test.c`](https://github.com/breakthatbass/cdox/blob/main/tests/test.c) excerpt below would produce.
 #
 ```C
 // test.c
