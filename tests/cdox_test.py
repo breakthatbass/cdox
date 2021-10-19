@@ -2,8 +2,12 @@ import pytest
 import subprocess
 import os
 
-from cdox import Doc
 from pathlib import Path
+
+try:
+    from cdox import Doc
+except ImportError:
+    from .cdox import Doc
 
 
 
