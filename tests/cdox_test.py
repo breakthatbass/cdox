@@ -2,7 +2,7 @@ import pytest
 import subprocess
 import os
 
-from cdox.cdox import Doc
+from cdox import Doc
 from pathlib import Path
 
 
