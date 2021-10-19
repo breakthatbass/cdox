@@ -1,6 +1,6 @@
 # cdox
 
-a script to automate documentation of your C APIs in markdown format.  
+A script to automate documentation of your C APIs in markdown format.  
 
 `cdox` reads in a source code file creates documentation based on the comments. it's sort of like doxygen but simpler and creates a markdown file.  
 
