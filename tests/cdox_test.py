@@ -7,7 +7,7 @@ from pathlib import Path
 try:
     from cdox import Doc
 except ImportError:
-    from .cdox import Doc
+    from cdox.cdox import Doc
 
 
 
