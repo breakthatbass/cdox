@@ -22,7 +22,7 @@ class Doc:
     def __init__(self, infile, outfile):
         self.infile = infile        # file to create the doc for
         self.outfile = outfile      # the doc file to be created
-        
+
         self.name = ''
         self.description = ''
         self.info_list = []  # should end up being something like [@desc, @param, @param, @return]
@@ -35,10 +35,10 @@ class Doc:
         '''
             Handle a line containing a cdox keyword, parse it as necessary,
             and either return it or write it to the markdown file.
-            
+
             Params: line
                 A line from the file that contains a cdox keyword.
-            
+
             Returns:
                 None if the line does not contain a keyword
                 otherwise it defines the global class variables.
@@ -62,12 +62,12 @@ class Doc:
 
     def get_func_name(self, line):
         '''
-            Parses a line containing a function parameter 
+            Parses a line containing a function parameter
             and returns it ready to be written to the doc.
-            
+
             Params: line
                 A line from the file being read from - expects a function in the line.
-            
+
             Returns:
                 A formatted code string to be written to the markdown doc.
         '''
@@ -133,7 +133,7 @@ class Doc:
                 prev = line
                 line = cfile.readline()
         doc.close()
-            
+
 
 def error_check(infile, outfile):
     '''
@@ -143,7 +143,7 @@ def error_check(infile, outfile):
             infile - the file to be read from and create the doc for - expects .c or .h.
             outfile - the markdown documentation file to write.
     '''
-    ok_files = ['.c', '.h']
+    ok_files = ['.c', '.h', '.go']
     # check file extensions
     in_ext = pathlib.Path(infile).suffix    # must be .c or .h
     out_ext = pathlib.Path(outfile).suffix  # must .md
